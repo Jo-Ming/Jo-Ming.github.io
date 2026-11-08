@@ -8,7 +8,11 @@
 <!-- Runs Cloudflare Turnstile invisibly inside the Wikollector app and hands the token back to it. -->
 <script>
   function send(message) {
-    if (window.ReactNativeWebView) window.ReactNativeWebView.postMessage(JSON.stringify(message));
+    if (window.ReactNativeWebView) return window.ReactNativeWebView.postMessage(JSON.stringify(message));
+    // Opened in a browser (for testing): show what the app would have been told.
+    var out = document.getElementById('result') || document.body.appendChild(document.createElement('p'));
+    out.id = 'result';
+    out.textContent = message.token ? 'Token OK (' + message.token.length + ' characters)' : 'Failed: ' + message.error;
   }
   function start() {
     var key = new URLSearchParams(location.search).get('sitekey');
